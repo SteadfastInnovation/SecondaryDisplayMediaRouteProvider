@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SecondaryDisplayMediaRouteProvider</string>
+
+    <string name="media_route_menu_title">Media route menu</string>
+</resources>

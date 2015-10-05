@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.steadfastinnovation.mediarouter.provider">
+
+    <application>
+        <service
+            android:name="com.steadfastinnovation.mediarouter.provider.SecondaryDisplayMediaRouteProviderService"
+            android:exported="false"
+            android:process=":mrp">
+            <intent-filter>
+                <action android:name="android.media.MediaRouteProviderService" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>
