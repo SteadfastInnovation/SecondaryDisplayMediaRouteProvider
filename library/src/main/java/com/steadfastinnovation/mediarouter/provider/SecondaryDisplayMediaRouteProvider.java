@@ -55,19 +55,26 @@ public class SecondaryDisplayMediaRouteProvider extends MediaRouteProvider imple
 
     private void upsertDisplay(Display... displays) {
         for (Display d : displays) {
-            MediaRouteDescriptor descriptor = new MediaRouteDescriptor.Builder("" + d.getDisplayId(), d.getName())
-                    .setDescription(mDisplayDiscription)
-                    .setPresentationDisplayId(d.getDisplayId())
-                    .addControlFilter(mSecondaryDisplayIntentFilter)
-                    .setEnabled(true)
-                    .setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_LOCAL)
-                    .setPlaybackStream(AudioManager.STREAM_MUSIC)
-                    .setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_FIXED)
-                    .setVolumeMax(10)
-                    .setVolume(10)
-                    .build();
-            mDescriptors.put(d.getDisplayId(), descriptor);
+            if (isPublicPresentation(d)) {
+                MediaRouteDescriptor descriptor = new MediaRouteDescriptor.Builder("" + d.getDisplayId(), d.getName())
+                        .setDescription(mDisplayDiscription)
+                        .setPresentationDisplayId(d.getDisplayId())
+                        .addControlFilter(mSecondaryDisplayIntentFilter)
+                        .setEnabled(true)
+                        .setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_LOCAL)
+                        .setPlaybackStream(AudioManager.STREAM_MUSIC)
+                        .setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_FIXED)
+                        .setVolumeMax(10)
+                        .setVolume(10)
+                        .build();
+                mDescriptors.put(d.getDisplayId(), descriptor);
+            }
         }
+    }
+
+    public boolean isPublicPresentation(Display d) {
+        return (d.getFlags() & (Display.FLAG_PRIVATE | Display.FLAG_PRESENTATION)) ==
+                Display.FLAG_PRESENTATION;
     }
 
     @Override
