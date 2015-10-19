@@ -55,7 +55,7 @@ public class SecondaryDisplayMediaRouteProvider extends MediaRouteProvider imple
 
     private void upsertDisplay(Display... displays) {
         for (Display d : displays) {
-            if (isPublicPresentation(d)) {
+            if (d != null && isPublicPresentation(d)) {
                 MediaRouteDescriptor descriptor = new MediaRouteDescriptor.Builder("" + d.getDisplayId(), d.getName())
                         .setDescription(mDisplayDiscription)
                         .setPresentationDisplayId(d.getDisplayId())
