@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.hardware.display.DisplayManager;
 import android.media.AudioManager;
+import android.os.Build;
 import android.support.v7.media.MediaRouteDescriptor;
 import android.support.v7.media.MediaRouteProvider;
 import android.support.v7.media.MediaRouteProviderDescriptor;
@@ -56,25 +57,29 @@ public class SecondaryDisplayMediaRouteProvider extends MediaRouteProvider imple
     private void upsertDisplay(Display... displays) {
         for (Display d : displays) {
             if (d != null && isPublicPresentation(d)) {
-                MediaRouteDescriptor descriptor = new MediaRouteDescriptor.Builder("" + d.getDisplayId(), d.getName())
-                        .setDescription(mDisplayDiscription)
-                        .setPresentationDisplayId(d.getDisplayId())
-                        .addControlFilter(mSecondaryDisplayIntentFilter)
-                        .setEnabled(true)
-                        .setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_LOCAL)
-                        .setPlaybackStream(AudioManager.STREAM_MUSIC)
-                        .setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_FIXED)
-                        .setVolumeMax(10)
-                        .setVolume(10)
-                        .build();
-                mDescriptors.put(d.getDisplayId(), descriptor);
+                try {
+                    MediaRouteDescriptor descriptor = new MediaRouteDescriptor.Builder("" + d.getDisplayId(), d.getName())
+                            .setDescription(mDisplayDiscription)
+                            .setPresentationDisplayId(d.getDisplayId())
+                            .addControlFilter(mSecondaryDisplayIntentFilter)
+                            .setEnabled(true)
+                            .setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_LOCAL)
+                            .setPlaybackStream(AudioManager.STREAM_MUSIC)
+                            .setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_FIXED)
+                            .setVolumeMax(10)
+                            .setVolume(10)
+                            .build();
+                    mDescriptors.put(d.getDisplayId(), descriptor);
+                } catch (NullPointerException npe) {
+                    // Continue, the display info changed under the display
+                }
             }
         }
     }
 
     public boolean isPublicPresentation(Display d) {
-        return (d.getFlags() & (Display.FLAG_PRIVATE | Display.FLAG_PRESENTATION)) ==
-                Display.FLAG_PRESENTATION;
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT
+                || (d.getFlags() & (Display.FLAG_PRIVATE | Display.FLAG_PRESENTATION)) == Display.FLAG_PRESENTATION;
     }
 
     @Override
