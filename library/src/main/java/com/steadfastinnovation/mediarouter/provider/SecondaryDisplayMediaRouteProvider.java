@@ -68,6 +68,7 @@ public class SecondaryDisplayMediaRouteProvider extends MediaRouteProvider imple
                             .setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_FIXED)
                             .setVolumeMax(10)
                             .setVolume(10)
+                            .setDeviceType(MediaRouter.RouteInfo.DEVICE_TYPE_TV)
                             .build();
                     mDescriptors.put(d.getDisplayId(), descriptor);
                 } catch (NullPointerException npe) {
