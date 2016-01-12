@@ -8,8 +8,8 @@ Easily search for and connect with the Media Router API by adding the library's 
 Example:
 
     mMediaRouteSelector = new MediaRouteSelector.Builder()
-                    .addControlCategory(SecondaryDisplayMediaRouteProvider.CATEGORY_SECONDARY_DISPLAY_ROUTE)
-                    .build();
+        .addControlCategory(SecondaryDisplayMediaRouteProvider.CATEGORY_SECONDARY_DISPLAY_ROUTE)
+        .build();
                     
 See sample project for a more complete example.
 
@@ -28,7 +28,7 @@ Download
 Gradle dependency:
 
     dependencies {
-        compile 'com.steadfastinnovation.mediarouter:secondary-display-provider:1.0.0'
+        compile 'com.steadfastinnovation.mediarouter:secondary-display-provider:1.0.1'
     }
 
 
