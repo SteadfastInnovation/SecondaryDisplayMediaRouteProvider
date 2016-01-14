@@ -21,7 +21,7 @@ Download
 Gradle dependency:
 
     dependencies {
-        compile 'com.steadfastinnovation.mediarouter:secondary-display-provider:1.0.1'
+        compile 'com.steadfastinnovation.mediarouter:secondary-display-provider:1.0.2'
     }
 
 
