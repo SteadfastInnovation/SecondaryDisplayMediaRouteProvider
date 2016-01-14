@@ -13,13 +13,6 @@ Example:
                     
 See sample project for a more complete example.
 
-Warning
---------
-
-By default the this Provider runs in a separate process *your.package.name:mrp*, which causes your
-**Application class to be loaded again outside of your main process**. This maybe causing unnecessary
-computational overhead or loading resources that are never used.
-
 Download
 --------
 

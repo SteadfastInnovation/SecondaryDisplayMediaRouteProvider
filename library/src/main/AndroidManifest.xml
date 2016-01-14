@@ -4,8 +4,7 @@
     <application>
         <service
             android:name="com.steadfastinnovation.mediarouter.provider.SecondaryDisplayMediaRouteProviderService"
-            android:exported="false"
-            android:process=":mrp">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.media.MediaRouteProviderService" />
             </intent-filter>
