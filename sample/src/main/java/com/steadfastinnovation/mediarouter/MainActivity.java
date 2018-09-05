@@ -8,6 +8,7 @@ import android.support.v7.app.MediaRouteActionProvider;
 import android.support.v7.media.MediaControlIntent;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
+import android.support.v7.media.MediaRouter.RouteInfo;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mMediaRouterCallback = new MediaRouterCallback();
 
-        MediaRouter.RouteInfo routeInfo = mMediaRouter.getSelectedRoute();
-        startPresentation(routeInfo);
+        RouteInfo route = mMediaRouter.getSelectedRoute();
+        startPresentation(route);
     }
 
     @Override
@@ -65,38 +66,37 @@ public class MainActivity extends AppCompatActivity {
 
     private class MediaRouterCallback extends MediaRouter.Callback {
         @Override
-        public void onRouteSelected(MediaRouter router, MediaRouter.RouteInfo routeInfo) {
-            super.onRouteSelected(router, routeInfo);
-            startPresentation(routeInfo);
+        public void onRouteSelected(MediaRouter router, RouteInfo route) {
+            super.onRouteSelected(router, route);
+            startPresentation(route);
         }
 
         @Override
-        public void onRouteUnselected(MediaRouter router, MediaRouter.RouteInfo route) {
+        public void onRouteUnselected(MediaRouter router, RouteInfo route) {
             super.onRouteUnselected(router, route);
             stopPresentation();
         }
 
         @Override
-        public void onRouteChanged(MediaRouter router, MediaRouter.RouteInfo route) {
+        public void onRouteChanged(MediaRouter router, RouteInfo route) {
             super.onRouteChanged(router, route);
             startPresentation(route);
         }
 
         @Override
-        public void onRoutePresentationDisplayChanged(MediaRouter router, MediaRouter.RouteInfo route) {
+        public void onRoutePresentationDisplayChanged(MediaRouter router, RouteInfo route) {
             super.onRoutePresentationDisplayChanged(router, route);
             startPresentation(route);
         }
     }
 
-    private void startPresentation(MediaRouter.RouteInfo routeInfo) {
+    private void startPresentation(RouteInfo route) {
         // Only start the presentation if the route is selected, not the default route,
         // has presentation display, and supports one of the categories we care about
-        if (routeInfo != null && routeInfo.isSelected() && !routeInfo.isDefault() && routeInfo.getPresentationDisplay() != null &&
-                (routeInfo.supportsControlCategory(SecondaryDisplayMediaRouteProvider.CATEGORY_SECONDARY_DISPLAY_ROUTE)
-                        || routeInfo.supportsControlCategory(MediaControlIntent.CATEGORY_LIVE_VIDEO))) {
+        if (route != null && route.isSelected() && !route.isDefault() && route.getPresentationDisplay() != null
+                && route.matchesSelector(mMediaRouteSelector)) {
             stopPresentation();
-            mCurrentPresentation = new ColorPresentation(this, routeInfo.getPresentationDisplay());
+            mCurrentPresentation = new ColorPresentation(this, route.getPresentationDisplay());
             mCurrentPresentation.show();
         }
     }
