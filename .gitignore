@@ -20,19 +20,17 @@ build/
 # Local configuration file (sdk path, etc)
 local.properties
 
-# IDEA module files
+# Unnecessary IDEA files
 *.iml
+*.iws
 .idea/modules.xml
-
-# Local IDEA workspace and tasks
 .idea/workspace.xml
 .idea/tasks.xml
-
-# IDEA library files
+.idea/gradle.xml
+.idea/misc.xml
+.idea/vcs.xml
 .idea/libraries/
-
-# IDEA non-crucial project files
-*.iws
+.idea/caches/
 
 # Windows thumbnail db
 *.DS_Store
