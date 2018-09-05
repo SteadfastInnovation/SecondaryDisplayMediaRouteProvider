@@ -9,8 +9,11 @@ import android.support.v7.media.MediaRouteDescriptor;
 import android.support.v7.media.MediaRouteProvider;
 import android.support.v7.media.MediaRouteProviderDescriptor;
 import android.support.v7.media.MediaRouter;
+import android.support.v7.media.MediaRouter.RouteInfo;
 import android.util.SparseArray;
 import android.view.Display;
+
+import java.util.List;
 
 public class SecondaryDisplayMediaRouteProvider extends MediaRouteProvider implements DisplayManager.DisplayListener {
 
@@ -20,7 +23,7 @@ public class SecondaryDisplayMediaRouteProvider extends MediaRouteProvider imple
     private DisplayManager mDisplayManager;
     private SparseArray<MediaRouteDescriptor> mDescriptors;
     private IntentFilter mSecondaryDisplayIntentFilter;
-    private String mDisplayDiscription;
+    private String mDisplayDescription;
 
     public SecondaryDisplayMediaRouteProvider(Context context, DisplayManager displayManager) {
         super(context);
@@ -29,7 +32,7 @@ public class SecondaryDisplayMediaRouteProvider extends MediaRouteProvider imple
         mDescriptors = new SparseArray<>();
         mSecondaryDisplayIntentFilter = new IntentFilter();
         mSecondaryDisplayIntentFilter.addCategory(CATEGORY_SECONDARY_DISPLAY_ROUTE);
-        mDisplayDiscription = context.getString(R.string.sfi_secondary_display_route_description);
+        mDisplayDescription = context.getString(R.string.sfi_secondary_display_route_description);
     }
 
     protected void startListening() {
@@ -55,25 +58,28 @@ public class SecondaryDisplayMediaRouteProvider extends MediaRouteProvider imple
     }
 
     private void upsertDisplay(Display... displays) {
+        List<RouteInfo> routes = MediaRouter.getInstance(getContext()).getRoutes();
         for (Display d : displays) {
-            if (d != null && isPublicPresentation(d)) {
-                try {
+            try {
+                // Only add a route if the display is a public presentation display and there are
+                // no routes that already provide the display
+                if (d != null && isPublicPresentation(d) && !isDisplayProvidedByRoute(d, routes)) {
                     MediaRouteDescriptor descriptor = new MediaRouteDescriptor.Builder("" + d.getDisplayId(), d.getName())
-                            .setDescription(mDisplayDiscription)
+                            .setDescription(mDisplayDescription)
                             .setPresentationDisplayId(d.getDisplayId())
                             .addControlFilter(mSecondaryDisplayIntentFilter)
                             .setEnabled(true)
-                            .setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_LOCAL)
+                            .setPlaybackType(RouteInfo.PLAYBACK_TYPE_LOCAL)
                             .setPlaybackStream(AudioManager.STREAM_MUSIC)
-                            .setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_FIXED)
+                            .setVolumeHandling(RouteInfo.PLAYBACK_VOLUME_FIXED)
                             .setVolumeMax(10)
                             .setVolume(10)
-                            .setDeviceType(MediaRouter.RouteInfo.DEVICE_TYPE_TV)
+                            .setDeviceType(RouteInfo.DEVICE_TYPE_TV)
                             .build();
                     mDescriptors.put(d.getDisplayId(), descriptor);
-                } catch (NullPointerException npe) {
-                    // Continue, the display info changed under the display
                 }
+            } catch (NullPointerException npe) {
+                // Continue, the display info changed under the display
             }
         }
     }
@@ -81,6 +87,17 @@ public class SecondaryDisplayMediaRouteProvider extends MediaRouteProvider imple
     public boolean isPublicPresentation(Display d) {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT
                 || (d.getFlags() & (Display.FLAG_PRIVATE | Display.FLAG_PRESENTATION)) == Display.FLAG_PRESENTATION;
+    }
+
+    private boolean isDisplayProvidedByRoute(Display d, List<RouteInfo> routes) {
+        for (RouteInfo route : routes) {
+            Display routeDisplay = route.getPresentationDisplay();
+            if (routeDisplay != null && routeDisplay.getDisplayId() == d.getDisplayId()) {
+                // This route is providing the display
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
