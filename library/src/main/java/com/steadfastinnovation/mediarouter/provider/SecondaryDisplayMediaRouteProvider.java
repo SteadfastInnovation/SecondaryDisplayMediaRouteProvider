@@ -91,6 +91,10 @@ public class SecondaryDisplayMediaRouteProvider extends MediaRouteProvider imple
 
     private boolean isDisplayProvidedByRoute(Display d, List<RouteInfo> routes) {
         for (RouteInfo route : routes) {
+            if (route.isDefault()) {
+                // Skip default route
+                continue;
+            }
             Display routeDisplay = route.getPresentationDisplay();
             if (routeDisplay != null && routeDisplay.getDisplayId() == d.getDisplayId()) {
                 // This route is providing the display
