@@ -28,12 +28,21 @@ local.properties
 .idea/tasks.xml
 .idea/gradle.xml
 .idea/misc.xml
-.idea/vcs.xml
 .idea/libraries/
 .idea/caches/
+.idea/dictionaries/
+.idea/assetWizardSettings.xml
+.idea/jarRepositories.xml
+.idea/.name
 
 # Windows thumbnail db
 *.DS_Store
 
 # Gradle signing file
 signing.gradle
+
+# Captures - Layout Inspector
+captures
+
+# Memory dumps
+*.hprof
