@@ -1,8 +1,9 @@
 package com.steadfastinnovation.mediarouter.provider;
 
 import android.hardware.display.DisplayManager;
-import android.support.v7.media.MediaRouteProvider;
-import android.support.v7.media.MediaRouteProviderService;
+
+import androidx.mediarouter.media.MediaRouteProvider;
+import androidx.mediarouter.media.MediaRouteProviderService;
 
 public class SecondaryDisplayMediaRouteProviderService extends MediaRouteProviderService {
 

@@ -7,11 +7,11 @@ ext {
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 27
+        targetSdkVersion 29
         versionCode 1
         versionName "1.1.1"
     }
@@ -25,9 +25,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.12'
-    // MediaRouter
-    implementation 'com.android.support:mediarouter-v7:27.1.1'
+    implementation 'androidx.mediarouter:mediarouter:1.1.0'
+
+    testImplementation 'junit:junit:4.13'
 }
 
 apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'

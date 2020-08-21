@@ -5,13 +5,14 @@ import android.content.IntentFilter;
 import android.hardware.display.DisplayManager;
 import android.media.AudioManager;
 import android.os.Build;
-import android.support.v7.media.MediaRouteDescriptor;
-import android.support.v7.media.MediaRouteProvider;
-import android.support.v7.media.MediaRouteProviderDescriptor;
-import android.support.v7.media.MediaRouter;
-import android.support.v7.media.MediaRouter.RouteInfo;
 import android.util.SparseArray;
 import android.view.Display;
+
+import androidx.mediarouter.media.MediaRouteDescriptor;
+import androidx.mediarouter.media.MediaRouteProvider;
+import androidx.mediarouter.media.MediaRouteProviderDescriptor;
+import androidx.mediarouter.media.MediaRouter;
+import androidx.mediarouter.media.MediaRouter.RouteInfo;
 
 import java.util.List;
 
